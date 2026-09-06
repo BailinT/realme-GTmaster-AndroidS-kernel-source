@@ -866,3 +866,6 @@ CONFIG_MEMTEST=y
 
 # BailinT: vendor hooks（sched/core.c 引用 android_rvh tracepoint，官方 defconfig 未开）
 CONFIG_ANDROID_VENDOR_HOOKS=y
+
+# BailinT: ANDROID menu（vendor hooks 依赖）
+CONFIG_ANDROID=y
