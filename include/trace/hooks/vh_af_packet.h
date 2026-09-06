@@ -25,7 +25,7 @@ DECLARE_HOOK(android_vh_check_dhcp_pkt,
 		int *do_drop),
 	TP_ARGS(sk, skb, dev, pt, do_drop));
 #else
-#define android_vh_check_dhcp_pkt(sk, skb, dev, pt, do_drop)
+#define trace_android_vh_check_dhcp_pkt(sk, skb, dev, pt, do_drop)
 #endif
 #endif /* _TRACE_HOOK_AF_PACKET_H */
 /* This part must be outside protection */
