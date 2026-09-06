@@ -53,11 +53,9 @@ mac80211-$(CONFIG_PM) += pm.o
 
 CFLAGS_trace.o := -I$(src)
 
-# BailinT: 原树把 rc80211_minstrel.o 自引用成 composite 目标（rc80211_minstrel-y := rc80211_minstrel.o），
-# kbuild 走 LD [M] 链接组件时空输入报 "ld: no input files"。恢复主线直加形态。
+# BailinT: 原树把 rc80211_minstrel.o 写成自引用 composite（rc80211_minstrel-y := rc80211_minstrel.o）
+# 导致 kbuild link_multi 空输入 "ld: no input files"。恢复主线直加形态；ht/debugfs 变体源码与
+# 本树头文件混血（r21 实测 .c/.h 版本错位），暂不编，缺 ht 仅退化 HT 速率算法不影响功能。
 mac80211-$(CONFIG_MAC80211_RC_MINSTREL) += rc80211_minstrel.o
-mac80211-$(CONFIG_MAC80211_RC_MINSTREL_HT) += rc80211_minstrel_ht.o
-mac80211-$(CONFIG_MAC80211_RC_MINSTREL)$(CONFIG_MAC80211_DEBUGFS) += rc80211_minstrel_debugfs.o
-mac80211-$(CONFIG_MAC80211_RC_MINSTREL_HT)$(CONFIG_MAC80211_DEBUGFS) += rc80211_minstrel_ht_debugfs.o
 
 ccflags-y += -DDEBUG
