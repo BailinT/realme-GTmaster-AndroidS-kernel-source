@@ -872,3 +872,6 @@ CONFIG_ANDROID=y
 
 # BailinT: special_opt 依赖 hooks 头缺失的 DECLARE_HOOK 声明，关闭（OPLUS 特性，无功能影响）
 # CONFIG_OPLUS_FEATURE_UIFRIST_HEAVYLOAD is not set
+
+# BailinT: msm8916 老平台驱动与新 clang -Werror 冲突，关闭（无关机型）
+# CONFIG_QCOM_APCS_MSM8916 is not set
