@@ -875,3 +875,5 @@ CONFIG_ANDROID=y
 
 # BailinT: msm8916 老平台驱动与新 clang -Werror 冲突，关闭（无关机型）
 # CONFIG_QCOM_APCS_MSM8916 is not set
+# BailinT: KSU 依赖 selinux flask.h（genheaders 产物），开 SELINUX
+CONFIG_SECURITY_SELINUX=y
