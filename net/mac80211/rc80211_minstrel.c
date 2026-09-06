@@ -55,6 +55,16 @@
 #include "rate.h"
 #include "rc80211_minstrel.h"
 
+/* BailinT: 树 rate.h 无 rate_control_send_low（混血版本），补保守实现（与主线语义一致：
+   无 sta/私有数据 的帧不做 RC，用基础速率发送） */
+static inline int rate_control_send_low(struct ieee80211_sta *pubsta, void *priv_sta,
+					struct ieee80211_tx_rate_control *txrc)
+{
+	if (!pubsta || !priv_sta)
+		return 1;
+	return 0;
+}
+
 #define SAMPLE_TBL(_mi, _idx, _col) \
 		_mi->sample_table[(_idx * SAMPLE_COLUMNS) + _col]
 
@@ -167,13 +177,7 @@ minstrel_calc_rate_stats(struct minstrel_rate_stats *mrs)
 		if (unlikely(!mrs->att_hist)) {
 			mrs->prob_ewma = cur_prob;
 		} else {
-			/* update exponential weighted moving variance */
-			mrs->prob_ewmv = minstrel_ewmv(mrs->prob_ewmv,
-							cur_prob,
-							mrs->prob_ewma,
-							EWMA_LEVEL);
-
-			/*update exponential weighted moving avarage */
+			/* BailinT: 树 .h 无 prob_ewmv/minstrel_ewmv（混血版本），只保留 ewma 更新 */
 			mrs->prob_ewma = minstrel_ewma(mrs->prob_ewma,
 						       cur_prob,
 						       EWMA_LEVEL);
@@ -635,7 +639,7 @@ minstrel_init_cck_rates(struct minstrel_priv *mp)
 }
 
 static void *
-minstrel_alloc(struct ieee80211_hw *hw, struct dentry *debugfsdir)
+minstrel_alloc(struct ieee80211_hw *hw)
 {
 	struct minstrel_priv *mp;
 
@@ -673,7 +677,7 @@ minstrel_alloc(struct ieee80211_hw *hw, struct dentry *debugfsdir)
 #ifdef CONFIG_MAC80211_DEBUGFS
 	mp->fixed_rate_idx = (u32) -1;
 	mp->dbg_fixed_rate = debugfs_create_u32("fixed_rate_idx",
-			0666, debugfsdir, &mp->fixed_rate_idx);
+			0666, hw->wiphy->debugfsdir, &mp->fixed_rate_idx);
 #endif
 
 	minstrel_init_cck_rates(mp);
@@ -716,10 +720,7 @@ const struct rate_control_ops mac80211_minstrel = {
 	.free = minstrel_free,
 	.alloc_sta = minstrel_alloc_sta,
 	.free_sta = minstrel_free_sta,
-#ifdef CONFIG_MAC80211_DEBUGFS
-	.add_sta_debugfs = minstrel_add_sta_debugfs,
-	.remove_sta_debugfs = minstrel_remove_sta_debugfs,
-#endif
+	/* BailinT: 不编 rc80211_minstrel_debugfs.c，去掉对它的引用（rate.h 侧判空，功能无害） */
 	.get_expected_throughput = minstrel_get_expected_throughput,
 };
 
