@@ -520,7 +520,7 @@ CONFIG_VIDEO_SAMSUNG_S5P_MFC=m
 CONFIG_VIDEO_SAMSUNG_EXYNOS_GSC=m
 CONFIG_VIDEO_RENESAS_FCP=m
 CONFIG_VIDEO_RENESAS_VSP1=m
-CONFIG_DRM=m
+CONFIG_DRM=y
 CONFIG_DRM_I2C_NXP_TDA998X=m
 CONFIG_DRM_NOUVEAU=m
 CONFIG_DRM_EXYNOS=m
@@ -881,3 +881,9 @@ CONFIG_ANDROID=y
 # BailinT: KSU 依赖 selinux flask.h（genheaders 产物），开 SELINUX
 CONFIG_SECURITY_SELINUX=y
 CONFIG_SECURITY_SELINUX_SIDTAB_HASH_BITS=9
+
+# BailinT: r22 链接期 undefined reference 补齐
+# qcom_scm_set_download_mode/disable_sdi/deassert_ps_hold <- drivers/firmware/qcom_scm.c (无 default)
+CONFIG_QCOM_SCM=y
+# get_project <- drivers/soc/oplus/system/oplus_project (default n)
+CONFIG_OPLUS_FEATURE_OPROJECT=y
