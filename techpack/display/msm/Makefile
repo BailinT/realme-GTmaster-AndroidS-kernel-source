@@ -201,4 +201,6 @@ endif #/* OPLUS_FEATURE_PXLW_IRIS5 */
 
 obj-$(CONFIG_DISPLAY_BUILD)	+= msm_drm.o
 obj-$(CONFIG_DRM_OPLUS_NOTIFY) += oplus_notify.o
-obj-$(CONFIG_DRM_FBDEV_EMULATION) += msm_fbdev.o
+# BailinT: msm_fbdev.c 在官方源码包中缺失，DRM_FBDEV_EMULATION=y 时 No rule；
+# fbdev 仿真是 legacy /dev/fb0 路径，真实显示走 msm_drm KMS，直接禁用该编译单元
+# obj-$(CONFIG_DRM_FBDEV_EMULATION) += msm_fbdev.o
